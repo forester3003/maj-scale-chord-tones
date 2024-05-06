@@ -86,7 +86,7 @@ export default function MajScale() {
   };
 
   return (
-    <div className="h-screen">
+    <>
       <div className="flex justify-center items-center mt-4">
         <label className="mr-2">Root:</label>
         <select
@@ -129,6 +129,6 @@ export default function MajScale() {
       <div className="overflow-x-auto">
         <figure ref={fretboardRef} className="flex-none"></figure>
       </div>
-    </div>
+    </>
   );
 }
