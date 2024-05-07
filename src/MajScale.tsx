@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Fretboard } from "@moonwave99/fretboard.js";
 
 export default function MajScale() {
+  // フレットボードの描画用のref
   const fretboardRef = useRef<HTMLElement>(null);
+  // 選択されたルート音とコードのstate
   const [root, setRoot] = useState("C");
   const [chord, setChord] = useState("I_Maj7");
+  // 選択状態の画面表示用のstate
   const [selectedValues, setSelectedValues] = useState({
     root: "C",
     chord: "I_Maj7",
@@ -24,7 +27,7 @@ export default function MajScale() {
         width: 960,
       });
 
-      // フレットボードにスケールを描画
+      // フレットボードにメジャースケールを描画
       fretboard.renderScale({
         root: root,
         type: "ionian",
@@ -41,22 +44,24 @@ export default function MajScale() {
       // Ionianにおけるダイアトニックコード定義
       const chordsDefinition: { [key: string]: string[] } = {
         I_Maj7: ["1P", "3M", "5P", "7M"],
-        II_min7: ["2M", "4P", "6M", "1P"],
-        III_min7: ["3M", "5P", "7M", "2M"],
+        II_m7: ["2M", "4P", "6M", "1P"],
+        III_m7: ["3M", "5P", "7M", "2M"],
         IV_Maj7: ["4P", "6M", "1P", "3M"],
         V_7: ["5P", "7M", "2M", "4P"],
-        VI_min7: ["6M", "1P", "3M", "5P"],
-        VII_min7b5: ["7M", "2M", "4P", "6M"],
+        VI_m7: ["6M", "1P", "3M", "5P"],
+        VII_m7b5: ["7M", "2M", "4P", "6M"],
       };
 
       const chordComponent: string[] = chordsDefinition[chord];
 
       chordComponent.forEach((interval, index) => {
+        // rootの場合は色を変える
         if (index === 0) {
           fretboard.style({
             filter: { interval: interval },
             fill: "orange",
           });
+          // それ以外のインターバルリストに入っているものは色を変える
         } else {
           fretboard.style({
             filter: { interval: interval },
@@ -71,16 +76,22 @@ export default function MajScale() {
       ]);*/
       console.log("rendered");
     }
-  }, [fretboardRef.current, root, chord]); // fretboardRef.current が変更されるたびに再レンダリングをトリガー
+  }, [fretboardRef.current, root, chord]); // 依存配列が変更されるたびに再レンダリングをトリガー
 
+  // ルート音が変更されたときキックされる関数
   const handleRootChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // rootのstateを更新
     setRoot(event.target.value);
+    // 選択された値をstateに保存
     const newRoot = event.target.value;
     setSelectedValues((prev) => ({ ...prev, root: newRoot }));
   };
 
+  // コードが変更されたときキックされる関数
   const handleChordChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // chordのstateを更新
     setChord(event.target.value);
+    // 選択された値をstateに保存
     const newChord = event.target.value;
     setSelectedValues((prev) => ({ ...prev, chord: newChord }));
   };
@@ -114,12 +125,12 @@ export default function MajScale() {
           className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
         >
           <option value="I_Maj7">IMaj7</option>
-          <option value="II_min7">IImin7</option>
-          <option value="III_min7">IIImin7</option>
+          <option value="II_m7">IIm7</option>
+          <option value="III_m7">IIIm7</option>
           <option value="IV_Maj7">IVMaj7</option>
           <option value="V_7">V7</option>
-          <option value="VI_min7">VImin7</option>
-          <option value="VII_min7b5">VIImin7b5</option>
+          <option value="VI_m7">VIm7</option>
+          <option value="VII_m7b5">VIIm7b5</option>
         </select>
       </div>
       <div className="text-center mt-4">
