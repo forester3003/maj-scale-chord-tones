@@ -4,14 +4,27 @@ import { Fretboard } from "@moonwave99/fretboard.js";
 export default function MajScale() {
   // フレットボードの描画用のref
   const fretboardRef = useRef<HTMLElement>(null);
-  // 選択されたルート音とコードのstate
-  const [root, setRoot] = useState("C");
-  const [chord, setChord] = useState("I_Maj7");
+  // 選択されたルート音とコードのstate（ローカルストレージから初期値を読み込む）
+  const [root, setRoot] = useState(() => localStorage.getItem("majScaleRoot") || "C");
+  const [chord, setChord] = useState(() => localStorage.getItem("majScaleChord") || "I_Maj7");
   // 選択状態の画面表示用のstate
   const [selectedValues, setSelectedValues] = useState({
-    root: "C",
-    chord: "I_Maj7",
+    root: localStorage.getItem("majScaleRoot") || "C",
+    chord: localStorage.getItem("majScaleChord") || "I_Maj7",
   });
+
+  // root または chord が変更されたときにローカルストレージに保存
+  useEffect(() => {
+    localStorage.setItem("majScaleRoot", root);
+  }, [root]);
+
+  useEffect(() => {
+    localStorage.setItem("majScaleChord", chord);
+  }, [chord]);
+
+  useEffect(() => {
+    setSelectedValues({ root: root, chord: chord });
+  }, [root, chord]);
 
   useEffect(() => {
     console.log(root, chord);
@@ -76,24 +89,18 @@ export default function MajScale() {
       ]);*/
       console.log("rendered");
     }
-  }, [fretboardRef.current, root, chord]); // 依存配列が変更されるたびに再レンダリングをトリガー
+  }, [root, chord]); // 依存配列が変更されるたびに再レンダリングをトリガー
 
   // ルート音が変更されたときキックされる関数
   const handleRootChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // rootのstateを更新
     setRoot(event.target.value);
-    // 選択された値をstateに保存
-    const newRoot = event.target.value;
-    setSelectedValues((prev) => ({ ...prev, root: newRoot }));
   };
 
   // コードが変更されたときキックされる関数
   const handleChordChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // chordのstateを更新
     setChord(event.target.value);
-    // 選択された値をstateに保存
-    const newChord = event.target.value;
-    setSelectedValues((prev) => ({ ...prev, chord: newChord }));
   };
 
   return (
@@ -134,8 +141,7 @@ export default function MajScale() {
         </select>
       </div>
       <div className="text-center mt-4">
-        <span>{selectedValues.root}メジャースケール上の</span>
-        <span>{selectedValues.chord.replace(/_/g, "")}</span>
+        <span>{selectedValues.chord.replace(/_/g, "")} of {selectedValues.root} Major Scale</span>
       </div>
       <div className="overflow-x-auto">
         <figure ref={fretboardRef} className="flex-none"></figure>
