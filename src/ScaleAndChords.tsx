@@ -221,29 +221,26 @@ export default function ScaleAndChords() {
       <div className="flex justify-center items-start mt-4 w-full max-w-screen-md mx-auto">
         <div className="w-full">
 
-          <div className="text-center mt-4">
+          <div className="text-center">
             <span>Scale: {scaleRoot} {scaleType}</span>
-            <br />
-            <span className='inline-block p-2 my-2 mx-2 rounded-md bg-red-100 shadow'>1st Chord: {firstBar.root} {firstBar.chord.replace(/_/g, "")}</span>
-            <span className="inline-block p-2 my-2 mx-2 rounded-md bg-blue-100 shadow">2nd Chord: {secondBar.root} {secondBar.chord.replace(/_/g, "")}</span>
           </div>
 
           {/* コード表示切り替えボタン */}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-2">
             <button
-              className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'first' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+              className={`mx-2 px-2 py-1 rounded-md min-w-[80px] ${visibleCode === 'first' ? 'bg-red-300' : 'bg-gray-100 hover:bg-red-200'}`}
               onClick={() => setVisibleCode('first')}
             >
-              1st Chord
+              {firstBar.root}{firstBar.chord.replace(/_/g, "")}
             </button>
             <button
-              className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'second' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+              className={`mx-2 px-2 py-1 rounded-md min-w-[80px] ${visibleCode === 'second' ? 'bg-blue-300' : 'bg-gray-100 hover:bg-blue-200'}`}
               onClick={() => setVisibleCode('second')}
             >
-              2nd Chord
+              {secondBar.root}{secondBar.chord.replace(/_/g, "")}
             </button>
             <button
-              className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'both' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+              className={`mx-2 px-2 py-1 rounded-md ${visibleCode === 'both' ? 'bg-purple-300' : 'bg-gray-100 hover:bg-purple-200'}`}
               onClick={() => setVisibleCode('both')}
             >
               Both Chords

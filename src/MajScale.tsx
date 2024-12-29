@@ -141,8 +141,7 @@ export default function MajScale() {
         </select>
       </div>
       <div className="text-center mt-4">
-        <span>{selectedValues.root}メジャースケール上の</span>
-        <span>{selectedValues.chord.replace(/_/g, "")}</span>
+        <span>{selectedValues.chord.replace(/_/g, "")} of {selectedValues.root} Major Scale</span>
       </div>
       <div className="overflow-x-auto">
         <figure ref={fretboardRef} className="flex-none"></figure>
