@@ -4,14 +4,27 @@ import { Fretboard } from "@moonwave99/fretboard.js";
 export default function MajScale() {
   // フレットボードの描画用のref
   const fretboardRef = useRef<HTMLElement>(null);
-  // 選択されたルート音とコードのstate
-  const [root, setRoot] = useState("C");
-  const [chord, setChord] = useState("I_Maj7");
+  // 選択されたルート音とコードのstate（ローカルストレージから初期値を読み込む）
+  const [root, setRoot] = useState(() => localStorage.getItem("majScaleRoot") || "C");
+  const [chord, setChord] = useState(() => localStorage.getItem("majScaleChord") || "I_Maj7");
   // 選択状態の画面表示用のstate
   const [selectedValues, setSelectedValues] = useState({
-    root: "C",
-    chord: "I_Maj7",
+    root: localStorage.getItem("majScaleRoot") || "C",
+    chord: localStorage.getItem("majScaleChord") || "I_Maj7",
   });
+
+  // root または chord が変更されたときにローカルストレージに保存
+  useEffect(() => {
+    localStorage.setItem("majScaleRoot", root);
+  }, [root]);
+
+  useEffect(() => {
+    localStorage.setItem("majScaleChord", chord);
+  }, [chord]);
+
+  useEffect(() => {
+    setSelectedValues({ root: root, chord: chord });
+  }, [root, chord]);
 
   useEffect(() => {
     console.log(root, chord);
@@ -82,18 +95,12 @@ export default function MajScale() {
   const handleRootChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // rootのstateを更新
     setRoot(event.target.value);
-    // 選択された値をstateに保存
-    const newRoot = event.target.value;
-    setSelectedValues((prev) => ({ ...prev, root: newRoot }));
   };
 
   // コードが変更されたときキックされる関数
   const handleChordChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // chordのstateを更新
     setChord(event.target.value);
-    // 選択された値をstateに保存
-    const newChord = event.target.value;
-    setSelectedValues((prev) => ({ ...prev, chord: newChord }));
   };
 
   return (

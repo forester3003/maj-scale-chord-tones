@@ -9,17 +9,55 @@ interface ChordIntervals {
 export default function ScaleAndChords() {
   // フレットボードの描画用のref
   const fretboardRef = useRef<HTMLElement>(null);
-  // スケール関連のstate
-  const [scaleRoot, setScaleRoot] = useState("C");
-  const [scaleType, setScaleType] = useState("ionian");
-  // 選択されたコード進行のstate
-  const [firstBar, setFirstBar] = useState({ root: "G", chord: "7" }); // G7
-  const [secondBar, setSecondBar] = useState({ root: "C", chord: "Maj7" }); // CM7
+  // スケール関連のstate（ローカルストレージから初期値を読み込む）
+  const [scaleRoot, setScaleRoot] = useState(() => localStorage.getItem("scaleAndChordsScaleRoot") || "C");
+  const [scaleType, setScaleType] = useState(() => localStorage.getItem("scaleAndChordsScaleType") || "ionian");
+  // 選択されたコード進行のstate（ローカルストレージから初期値を読み込む）
+  const [firstBar, setFirstBar] = useState(() => {
+    const storedFirstBarRoot = localStorage.getItem("scaleAndChordsFirstBarRoot") || "G";
+    const storedFirstBarChord = localStorage.getItem("scaleAndChordsFirstBarChord") || "7";
+    return { root: storedFirstBarRoot, chord: storedFirstBarChord };
+  });
+  const [secondBar, setSecondBar] = useState(() => {
+    const storedSecondBarRoot = localStorage.getItem("scaleAndChordsSecondBarRoot") || "C";
+    const storedSecondBarChord = localStorage.getItem("scaleAndChordsSecondBarChord") || "Maj7";
+    return { root: storedSecondBarRoot, chord: storedSecondBarChord };
+  });
   // 選択状態の画面表示用のstate（不要になる可能性あり、一旦残します）
   const [selectedValues, setSelectedValues] = useState({
     root: "C",
     chord: "Maj7",
   });
+
+  // スケール関連のstateをローカルストレージに保存
+  useEffect(() => {
+    localStorage.setItem("scaleAndChordsScaleRoot", scaleRoot);
+  }, [scaleRoot]);
+
+  useEffect(() => {
+    localStorage.setItem("scaleAndChordsScaleType", scaleType);
+  }, [scaleType]);
+
+  // コード進行のstateをローカルストレージに保存
+  useEffect(() => {
+    localStorage.setItem("scaleAndChordsFirstBarRoot", firstBar.root);
+  }, [firstBar.root]);
+
+  useEffect(() => {
+    localStorage.setItem("scaleAndChordsFirstBarChord", firstBar.chord);
+  }, [firstBar.chord]);
+
+  useEffect(() => {
+    localStorage.setItem("scaleAndChordsSecondBarRoot", secondBar.root);
+  }, [secondBar.root]);
+
+  useEffect(() => {
+    localStorage.setItem("scaleAndChordsSecondBarChord", secondBar.chord);
+  }, [secondBar.chord]);
+
+  useEffect(() => {
+    setSelectedValues({ root: `${firstBar.root}${firstBar.chord}`, chord: `${secondBar.root}${secondBar.chord}` });
+  }, [firstBar, secondBar]);
 
   // コードの構成音を特定する関数
   const getChordTones = (root: string, chordType: string): string[] => {
@@ -109,7 +147,7 @@ export default function ScaleAndChords() {
       const firstBarChordTones = getChordTones(firstBar.root, firstBar.chord);
       const secondBarChordTones = getChordTones(secondBar.root, secondBar.chord);
 
-      // 1小節目のコードトーンを青色で表示
+      // 1小節目のコードトーンを赤色で表示
       firstBarChordTones.forEach((note: string) => {
         fretboard.style({
           filter: { note: note },
@@ -117,7 +155,7 @@ export default function ScaleAndChords() {
         });
       });
 
-      // 2小節目のコードトーンを黄色で表示
+      // 2小節目のコードトーンを青色で表示
       secondBarChordTones.forEach((note: string) => {
         fretboard.style({
           filter: { note: note },
@@ -125,7 +163,7 @@ export default function ScaleAndChords() {
         });
       });
 
-      // 重複するコードトーンを特定し、オレンジ色で表示
+      // 重複するコードトーンを特定し、紫色で表示
       const overlappingNotes = firstBarChordTones.filter(note => secondBarChordTones.includes(note));
       overlappingNotes.forEach((note: string) => {
         fretboard.style({
