@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Fretboard } from "@moonwave99/fretboard.js";
+import Accordion from "./components/Accordion"; // Accordionコンポーネントをインポート
 
 // コードのインターバル定義の型
 interface ChordIntervals {
@@ -217,144 +218,146 @@ export default function ScaleAndChords() {
 
   return (
     <>
-      <div className="flex justify-center items-center mt-4">
-        {/* スケール選択 */}
-        <div>
-          <label className="mr-2">Scale Root:</label>
-          <select
-            value={scaleRoot}
-            onChange={handleScaleRootChange}
-            className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
-          >
-            <option value="C">C</option>
-            <option value="Db">Db/C#</option>
-            <option value="D">D</option>
-            <option value="Eb">Eb/D#</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="Gb">Gb/F#</option>
-            <option value="G">G</option>
-            <option value="Ab">Ab/G#</option>
-            <option value="A">A</option>
-            <option value="Bb">Bb/A#</option>
-            <option value="B">B</option>
-          </select>
-          <label className="mx-2">Scale Type:</label>
-          <select
-            value={scaleType}
-            onChange={handleScaleTypeChange}
-            className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
-          >
-            <option value="ionian">Major (Ionian)</option>
-            <option value="dorian">Dorian</option>
-            <option value="phrygian">Phrygian</option>
-            <option value="lydian">Lydian</option>
-            <option value="mixolydian">Mixolydian</option>
-            <option value="aeolian">Minor (Aeolian)</option>
-            <option value="locrian">Locrian</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex justify-center items-center mt-4">
-        {/* 1小節目 */}
-        <div>
-          <label className="mr-2">1小節目 Root:</label>
-          <select
-            value={firstBar.root}
-            onChange={handleFirstBarRootChange}
-            className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
-          >
-            <option value="C">C</option>
-            <option value="Db">Db/C#</option>
-            <option value="D">D</option>
-            <option value="Eb">Eb/D#</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="Gb">Gb/F#</option>
-            <option value="G">G</option>
-            <option value="Ab">Ab/G#</option>
-            <option value="A">A</option>
-            <option value="Bb">Bb/A#</option>
-            <option value="B">B</option>
-          </select>
-          <label className="mx-2">Chord:</label>
-          <select
-            value={firstBar.chord}
-            onChange={handleFirstBarChordChange}
-            className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
-          >
-            <option value="Maj7">Maj7</option>
-            <option value="7">7</option>
-            <option value="m7">m7</option>
-            <option value="m7b5">m7b5</option>
-          </select>
-        </div>
+      <div className="flex justify-center items-start mt-4 w-full max-w-screen-md mx-auto">
+        <div className="w-full">
 
-        {/* 2小節目 */}
-        <div className="ml-4">
-          <label className="mr-2">2小節目 Root:</label>
-          <select
-            value={secondBar.root}
-            onChange={handleSecondBarRootChange}
-            className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
-          >
-            <option value="C">C</option>
-            <option value="Db">Db/C#</option>
-            <option value="D">D</option>
-            <option value="Eb">Eb/D#</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="Gb">Gb/F#</option>
-            <option value="G">G</option>
-            <option value="Ab">Ab/G#</option>
-            <option value="A">A</option>
-            <option value="Bb">Bb/A#</option>
-            <option value="B">B</option>
-          </select>
-          <label className="mx-2">Chord:</label>
-          <select
-            value={secondBar.chord}
-            onChange={handleSecondBarChordChange}
-            className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
-          >
-            <option value="Maj7">Maj7</option>
-            <option value="7">7</option>
-            <option value="m7">m7</option>
-            <option value="m7b5">m7b5</option>
-          </select>
+          <div className="text-center mt-4">
+            <span>Scale: {scaleRoot} {scaleType}</span>
+            <br />
+            <span className='inline-block p-2 my-2 mx-2 rounded-md bg-red-100 shadow'>1st Chord: {firstBar.root} {firstBar.chord.replace(/_/g, "")}</span>
+            <span className="inline-block p-2 my-2 mx-2 rounded-md bg-blue-100 shadow">2nd Chord: {secondBar.root} {secondBar.chord.replace(/_/g, "")}</span>
+          </div>
+
+          {/* コード表示切り替えボタン */}
+          <div className="flex justify-center mt-4">
+            <button
+              className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'first' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setVisibleCode('first')}
+            >
+              1st Chord
+            </button>
+            <button
+              className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'second' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setVisibleCode('second')}
+            >
+              2nd Chord
+            </button>
+            <button
+              className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'both' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+              onClick={() => setVisibleCode('both')}
+            >
+              Both Chords
+            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <figure ref={fretboardRef} className="flex-none"></figure>
+          </div>
+          <Accordion title="Settings">
+            <div>
+              <div className="mb-4">
+                <label className="mr-2">Scale Root:</label>
+                <select
+                  value={scaleRoot}
+                  onChange={handleScaleRootChange}
+                  className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
+                >
+                  <option value="C">C</option>
+                  <option value="Db">Db/C#</option>
+                  <option value="D">D</option>
+                  <option value="Eb">Eb/D#</option>
+                  <option value="E">E</option>
+                  <option value="F">F</option>
+                  <option value="Gb">Gb/F#</option>
+                  <option value="G">G</option>
+                  <option value="Ab">Ab/G#</option>
+                  <option value="A">A</option>
+                  <option value="Bb">Bb/A#</option>
+                  <option value="B">B</option>
+                </select>
+                <label className="mx-2">Scale Type:</label>
+                <select
+                  value={scaleType}
+                  onChange={handleScaleTypeChange}
+                  className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
+                >
+                  <option value="ionian">Major (Ionian)</option>
+                  <option value="dorian">Dorian</option>
+                  <option value="phrygian">Phrygian</option>
+                  <option value="lydian">Lydian</option>
+                  <option value="mixolydian">Mixolydian</option>
+                  <option value="aeolian">Minor (Aeolian)</option>
+                  <option value="locrian">Locrian</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="mr-2">1st Bar Root:</label>
+                <select
+                  value={firstBar.root}
+                  onChange={handleFirstBarRootChange}
+                  className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
+                >
+                  <option value="C">C</option>
+                  <option value="Db">Db/C#</option>
+                  <option value="D">D</option>
+                  <option value="Eb">Eb/D#</option>
+                  <option value="E">E</option>
+                  <option value="F">F</option>
+                  <option value="Gb">Gb/F#</option>
+                  <option value="G">G</option>
+                  <option value="Ab">Ab/G#</option>
+                  <option value="A">A</option>
+                  <option value="Bb">Bb/A#</option>
+                  <option value="B">B</option>
+                </select>
+                <label className="mx-2">Chord:</label>
+                <select
+                  value={firstBar.chord}
+                  onChange={handleFirstBarChordChange}
+                  className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
+                >
+                  <option value="Maj7">Maj7</option>
+                  <option value="7">7</option>
+                  <option value="m7">m7</option>
+                  <option value="m7b5">m7b5</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mr-2">2nd Bar Root:</label>
+                <select
+                  value={secondBar.root}
+                  onChange={handleSecondBarRootChange}
+                  className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
+                >
+                  <option value="C">C</option>
+                  <option value="Db">Db/C#</option>
+                  <option value="D">D</option>
+                  <option value="Eb">Eb/D#</option>
+                  <option value="E">E</option>
+                  <option value="F">F</option>
+                  <option value="Gb">Gb/F#</option>
+                  <option value="G">G</option>
+                  <option value="Ab">Ab/G#</option>
+                  <option value="A">A</option>
+                  <option value="Bb">Bb/A#</option>
+                  <option value="B">B</option>
+                </select>
+                <label className="mx-2">Chord:</label>
+                <select
+                  value={secondBar.chord}
+                  onChange={handleSecondBarChordChange}
+                  className="text-gray-800 rounded-md border border-gray-500 focus:outline-none"
+                >
+                  <option value="Maj7">Maj7</option>
+                  <option value="7">7</option>
+                  <option value="m7">m7</option>
+                  <option value="m7b5">m7b5</option>
+                </select>
+              </div>
+            </div>
+          </Accordion>
         </div>
-      </div>
-      <div className="text-center mt-4">
-        <span>Scale: {scaleRoot} {scaleType}</span>
-        <br />
-        <span className='p-15 my-10 mx-10 rounded-lg bg-red-100 shadow'>1小節目: {firstBar.root} {firstBar.chord.replace(/_/g, "")}</span>
-        <span className="ml-4 p-15 my-10 mx-10 rounded-lg bg-blue-100 shadow">2小節目: {secondBar.root} {secondBar.chord.replace(/_/g, "")}</span>
-      </div>
-
-      {/* コード表示切り替えボタン */}
-      <div className="flex justify-center mt-4">
-        <button
-          className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'first' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
-          onClick={() => setVisibleCode('first')}
-        >
-          1つ目のコードのみ表示
-        </button>
-        <button
-          className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'second' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
-          onClick={() => setVisibleCode('second')}
-        >
-          2つ目のコードのみ表示
-        </button>
-        <button
-          className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'both' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
-          onClick={() => setVisibleCode('both')}
-        >
-          両方のコードを表示
-        </button>
-      </div>
-
-      <div className="overflow-x-auto">
-        <figure ref={fretboardRef} className="flex-none"></figure>
       </div>
     </>
   );

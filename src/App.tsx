@@ -37,9 +37,9 @@ function App() {
   const getMenuTitle = () => {
     switch (selectedView) {
       case 'majScale':
-        return 'メジャースケール';
+        return 'Major Scale & Diatonic Chord Tones';
       case 'scaleAndChords':
-        return 'スケールとコード';
+        return 'Scale & Two Chords';
       default:
         return '';
     }
@@ -50,9 +50,17 @@ function App() {
       case 'majScale':
         return (
           <div className='text-left'>
-            <p className='p-1'>Root から指板上に表示するメジャースケールを選択します。</p>
+            <p className='p-1'>
+              Root から指板上に表示するメジャースケールを選択します。
+            </p>
             <p className='p-1'>
               Chord から表示されているメジャースケールから指定したダイアトニックコードの構成音に色を付けます。
+            </p>
+            <p className='p-1'>
+              Selects a major scale to be displayed on the fretboard from Root.
+            </p>
+            <p className='p-1'>
+              Colors the component notes of the specified diatonic chord from the major scale displayed from Chord.
             </p>
           </div>
         );
@@ -63,7 +71,13 @@ function App() {
               ScaleRoot と Scale Type から指板上に表示するスケールを選択します。
             </p>
             <p className='p-1'>
-              1小節目 Root, Chord を選択すると、指板上に表示されているスケール上にコードトーンを赤色で表示します。2小節目も同様に、青色で表示します。重なっている音は紫色で表示します。
+              1つ目の設定で Root, Chord を選択すると、指板上に表示されているスケール上にそのコードトーンを赤色で表示します。2つ目も同様に設定でき、青色で表示されます。どちらの構成音にもなっている音は紫色で表示します。
+            </p>
+            <p className='p-1'>
+              Select the scale to be displayed on the fingerboard from ScaleRoot and Scale Type.
+            </p>
+            <p className='p-1'>
+              If Root, Chord is selected for the first setting, that chord tone will be displayed in red on the scale shown on the fretboard; the second can be set in the same way and will be displayed in blue. The second can be set in the same way, and will be displayed in blue, while notes that are also in either configuration will be displayed in purple.
             </p>
           </div>
         );
@@ -90,14 +104,14 @@ function App() {
         className={`fixed top-0 left-0 h-full w-64 bg-gray-100 p-4 shadow-md transform transition-transform duration-300 z-40 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           } ${isMobile ? 'w-full' : ''}`}
       >
-        <h2 className="text-lg font-bold mb-4">メニュー</h2>
+        <h2 className="text-lg font-bold mb-4">Menu</h2>
         <ul>
           <li className="py-2">
             <button
               onClick={() => handleMenuItemClick('majScale')}
               className="block w-full text-left"
             >
-              メジャースケール
+              Major Scale & Diatonic Chord Tones
             </button>
           </li>
           <li className="py-2">
@@ -105,7 +119,7 @@ function App() {
               onClick={() => handleMenuItemClick('scaleAndChords')}
               className="block w-full text-left"
             >
-              スケールとコード
+              Scale & Two Chords
             </button>
           </li>
         </ul>
@@ -123,13 +137,13 @@ function App() {
       {/* メインコンテンツ */}
       <div className={`${isMobile ? 'px-4 w-full' : 'container mx-auto'} transition-transform duration-300`}>
         {selectedView === 'majScale' && (
-          <div className='p-5 my-5 rounded-lg bg-yellow-100 shadow'>
+          <div className='p-5 my-5 rounded-lg bg-yellow-50 shadow'>
             <MajScale />
           </div>
         )}
 
         {selectedView === 'scaleAndChords' && (
-          <div className='p-5 my-5 rounded-lg bg-green-100 shadow'>
+          <div className='p-5 my-5 rounded-lg bg-yellow-50 shadow'>
             <ScaleAndChords />
           </div>
         )}
