@@ -23,6 +23,8 @@ export default function ScaleAndChords() {
     const storedSecondBarChord = localStorage.getItem("scaleAndChordsSecondBarChord") || "Maj7";
     return { root: storedSecondBarRoot, chord: storedSecondBarChord };
   });
+  // コードの表示状態を管理するstate
+  const [visibleCode, setVisibleCode] = useState<'first' | 'second' | 'both'>('both');
   // 選択状態の画面表示用のstate（不要になる可能性あり、一旦残します）
   const [selectedValues, setSelectedValues] = useState({
     root: "C",
@@ -61,12 +63,12 @@ export default function ScaleAndChords() {
 
   // コードの構成音を特定する関数
   const getChordTones = (root: string, chordType: string): string[] => {
-    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    const notes = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
     const intervals: ChordIntervals = {
       Maj7: ["1P", "3M", "5P", "7M"],
       m7: ["1P", "3m", "5P", "7m"],
-      7: ["1P", "3M", "5P", "b7"],
-      m7b5: ["1P", "3m", "b5", "7m"],
+      7: ["1P", "3M", "5P", "7m"],
+      m7b5: ["1P", "3m", "5b", "7m"],
     };
 
     const rootIndex = notes.indexOf(root);
@@ -131,7 +133,7 @@ export default function ScaleAndChords() {
         width: 960,
       });
 
-      // 1. スケールを描画
+      // スケールを描画
       fretboard.renderScale({
         root: scaleRoot,
         type: scaleType,
@@ -143,38 +145,46 @@ export default function ScaleAndChords() {
         fontSize: 10,
       });
 
-      // 2. コードトーンを描画
+      // コードトーンを描画
       const firstBarChordTones = getChordTones(firstBar.root, firstBar.chord);
       const secondBarChordTones = getChordTones(secondBar.root, secondBar.chord);
+      console.log("firstChord : " + firstBarChordTones);
+      console.log("secondChord : " + secondBarChordTones);
 
       // 1小節目のコードトーンを赤色で表示
-      firstBarChordTones.forEach((note: string) => {
-        fretboard.style({
-          filter: { note: note },
-          fill: "#fca5a5", // ソフトな赤
+      if (visibleCode === 'first' || visibleCode === 'both') {
+        firstBarChordTones.forEach((note: string) => {
+          fretboard.style({
+            filter: { note: note },
+            fill: "#fca5a5", // ソフトな赤
+          });
         });
-      });
+      }
 
       // 2小節目のコードトーンを青色で表示
-      secondBarChordTones.forEach((note: string) => {
-        fretboard.style({
-          filter: { note: note },
-          fill: "#93c5fd", // ソフトな青
+      if (visibleCode === 'second' || visibleCode === 'both') {
+        secondBarChordTones.forEach((note: string) => {
+          fretboard.style({
+            filter: { note: note },
+            fill: "#93c5fd", // ソフトな青
+          });
         });
-      });
+      }
 
       // 重複するコードトーンを特定し、紫色で表示
-      const overlappingNotes = firstBarChordTones.filter(note => secondBarChordTones.includes(note));
-      overlappingNotes.forEach((note: string) => {
-        fretboard.style({
-          filter: { note: note },
-          fill: "#c084fc", // ソフトな紫
+      if (visibleCode === 'both') {
+        const overlappingNotes = firstBarChordTones.filter(note => secondBarChordTones.includes(note));
+        overlappingNotes.forEach((note: string) => {
+          fretboard.style({
+            filter: { note: note },
+            fill: "#c084fc", // ソフトな紫
+          });
         });
-      });
+      }
 
       console.log("rendered");
     }
-  }, [fretboardRef.current, scaleRoot, scaleType, firstBar, secondBar]);
+  }, [fretboardRef.current, scaleRoot, scaleType, firstBar, secondBar, visibleCode]);
 
   // スケール関連のハンドラー
   const handleScaleRootChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -320,6 +330,29 @@ export default function ScaleAndChords() {
         <span className='p-15 my-10 mx-10 rounded-lg bg-red-100 shadow'>1小節目: {firstBar.root} {firstBar.chord.replace(/_/g, "")}</span>
         <span className="ml-4 p-15 my-10 mx-10 rounded-lg bg-blue-100 shadow">2小節目: {secondBar.root} {secondBar.chord.replace(/_/g, "")}</span>
       </div>
+
+      {/* コード表示切り替えボタン */}
+      <div className="flex justify-center mt-4">
+        <button
+          className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'first' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+          onClick={() => setVisibleCode('first')}
+        >
+          1つ目のコードのみ表示
+        </button>
+        <button
+          className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'second' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+          onClick={() => setVisibleCode('second')}
+        >
+          2つ目のコードのみ表示
+        </button>
+        <button
+          className={`mx-2 px-4 py-2 rounded-md ${visibleCode === 'both' ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'}`}
+          onClick={() => setVisibleCode('both')}
+        >
+          両方のコードを表示
+        </button>
+      </div>
+
       <div className="overflow-x-auto">
         <figure ref={fretboardRef} className="flex-none"></figure>
       </div>
