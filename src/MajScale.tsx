@@ -89,7 +89,7 @@ export default function MajScale() {
       ]);*/
       console.log("rendered");
     }
-  }, [fretboardRef.current, root, chord]); // 依存配列が変更されるたびに再レンダリングをトリガー
+  }, [root, chord]); // 依存配列が変更されるたびに再レンダリングをトリガー
 
   // ルート音が変更されたときキックされる関数
   const handleRootChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

@@ -27,10 +27,12 @@ export default function ScaleAndChords() {
   // コードの表示状態を管理するstate
   const [visibleCode, setVisibleCode] = useState<'first' | 'second' | 'both'>('both');
   // 選択状態の画面表示用のstate（不要になる可能性あり、一旦残します）
+  /*
   const [selectedValues, setSelectedValues] = useState({
     root: "C",
     chord: "Maj7",
   });
+  */
 
   // スケール関連のstateをローカルストレージに保存
   useEffect(() => {
@@ -58,9 +60,11 @@ export default function ScaleAndChords() {
     localStorage.setItem("scaleAndChordsSecondBarChord", secondBar.chord);
   }, [secondBar.chord]);
 
+  /*
   useEffect(() => {
     setSelectedValues({ root: `${firstBar.root}${firstBar.chord}`, chord: `${secondBar.root}${secondBar.chord}` });
   }, [firstBar, secondBar]);
+  */
 
   // コードの構成音を特定する関数
   const getChordTones = (root: string, chordType: string): string[] => {
@@ -185,7 +189,7 @@ export default function ScaleAndChords() {
 
       console.log("rendered");
     }
-  }, [fretboardRef.current, scaleRoot, scaleType, firstBar, secondBar, visibleCode]);
+  }, [scaleRoot, scaleType, firstBar, secondBar, visibleCode]);
 
   // スケール関連のハンドラー
   const handleScaleRootChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
