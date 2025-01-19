@@ -3,6 +3,7 @@ import './App.css';
 import MajScale from './MajScale';
 import ScaleAndChords from './ScaleAndChords';
 import Accordion from './components/Accordion';
+import ReactGA from 'react-ga4';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,6 +24,10 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('selectedView', selectedView); // selectedView が変更されるたびにローカルストレージに保存
+  }, [selectedView]);
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "page_view", page: window.location.pathname + window.location.search });
   }, [selectedView]);
 
   const toggleMenu = () => {

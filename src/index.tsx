@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ReactGA from 'react-ga4';
+
+const TRACKING_ID = 'G-704HZYSPSY';
+ReactGA.initialize(TRACKING_ID);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
