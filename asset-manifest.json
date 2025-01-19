@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/maj-scale-chord-tones/static/css/main.a913c465.css",
-    "main.js": "/maj-scale-chord-tones/static/js/main.35b5fcc6.js",
+    "main.js": "/maj-scale-chord-tones/static/js/main.716e5eed.js",
     "static/js/453.ae452d38.chunk.js": "/maj-scale-chord-tones/static/js/453.ae452d38.chunk.js",
     "index.html": "/maj-scale-chord-tones/index.html",
     "main.a913c465.css.map": "/maj-scale-chord-tones/static/css/main.a913c465.css.map",
-    "main.35b5fcc6.js.map": "/maj-scale-chord-tones/static/js/main.35b5fcc6.js.map",
+    "main.716e5eed.js.map": "/maj-scale-chord-tones/static/js/main.716e5eed.js.map",
     "453.ae452d38.chunk.js.map": "/maj-scale-chord-tones/static/js/453.ae452d38.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a913c465.css",
-    "static/js/main.35b5fcc6.js"
+    "static/js/main.716e5eed.js"
   ]
 }
