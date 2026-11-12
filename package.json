@@ -8,9 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "test": "vitest"
   },
   "dependencies": {
     "@moonwave99/fretboard.js": "^0.2.13",
@@ -28,7 +26,6 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.3.0",
     "autoprefixer": "^10.6.2",
-    "gh-pages": "^6.3.0",
     "jsdom": "^31.0.0",
     "postcss": "^8.5.32",
     "tailwindcss": "^3.4.19",
