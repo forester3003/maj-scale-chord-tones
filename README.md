@@ -21,14 +21,15 @@ Vitest でテストを実行する（ウォッチモード）。1回だけ実行
 型チェック（`tsc -b`）のあと、本番用ファイルを `build/` に出力する
 `npm run preview` でビルド結果をローカル確認できる
 
-### `npm run deploy`
+## デプロイ
 
-gh-pages を利用してデプロイする
-gh-pages ブランチが作成され、Github Pages で公開される
+`main` ブランチにマージすると、GitHub Actions（`.github/workflows/deploy.yml`）がテスト・ビルドして GitHub Pages に自動で公開する
 
-- [参考サイト](https://tukkytech.com/blog/react-github-deploy/)
+- PR ではテストとビルドだけ実行する（公開はしない）
+- 手動で公開し直したいときは、Actions タブの「Build and Deploy」から「Run workflow」を押す
+- 前提：リポジトリの Settings → Pages → Build and deployment の Source を「GitHub Actions」にしておくこと
 
 ## メモ
 
-- 2026年11月に Create React App から Vite へ移行した（CRA は非推奨化され、依存パッケージの脆弱性が解消できなくなったため）
+- 2026年11月に Create React App から Vite へ移行し、デプロイを `gh-pages` パッケージから GitHub Actions に切り替えた（CRA は非推奨化され、依存パッケージの脆弱性が解消できなくなったため）
 - `package.json` に `"type": "module"` を付けないこと。付けると Vite 8 の CommonJS 互換ルールが厳密になり、`react-ga4` の default import が壊れて画面が真っ白になる
