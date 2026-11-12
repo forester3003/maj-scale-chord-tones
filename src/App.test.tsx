@@ -2,18 +2,15 @@ import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import App from './App';
 
-jest.mock('react-ga4', () => ({
+vi.mock('react-ga4', () => ({
   __esModule: true,
-  default: { send: jest.fn(), initialize: jest.fn() },
+  default: { send: vi.fn(), initialize: vi.fn() },
 }));
 
 const MAJ_SCALE_TITLE = 'Major Scale & Diatonic Chord Tones';
 const SCALE_AND_CHORDS_TITLE = 'Scale & Two Chords';
 
 // The accordion header is the only button that contains an icon (svg).
-// fireEvent from @testing-library/react is used instead of user-event@13,
-// because user-event resolves a different @testing-library/dom copy whose
-// events are not wrapped in act() with React 18.
 const getAccordionHeader = () =>
   screen
     .getAllByRole('button')
